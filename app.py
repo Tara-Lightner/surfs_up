@@ -8,16 +8,25 @@
 
 # Set Up the Flask Weather App
 # Create a New Python File and Import the Flask Dependency
-from flask import Flask
+#from flask import Flask
+#import datetime as dt
+#from lib2to3.pytree import _Results
+#import numpy as np
+#import pandas as pd
+#import sqlalchemy
+#from sqlalchemy.ext.automap import automap_base
+#from sqlalchemy.orm import Session
+#from sqlalchemy import create_engine, func
+# from flask import Flask, jsonify
 import datetime as dt
-from lib2to3.pytree import _Results
 import numpy as np
 import pandas as pd
+
+
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
-# from flask import Flask, jsonify
 
 # Set Up the Database
 # Set Up the database engine for the Flask application
@@ -65,27 +74,27 @@ def welcome():
 @app.route("/api/v1.0/precipitation")
 def precipitation():
     prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
-precipitation = session.query(Measurement.date, Measurement.prcp).\
-filter(Measurement.date >= prev_year).all()
-precip = {date: prcp for date, prcp in precipitation}
-return jsonify(precip)
+    precipitation = session.query(Measurement.date, Measurement.prcp).\
+        filter(Measurement.date >= prev_year).all()
+    precip = {date: prcp for date, prcp in precipitation}
+    return jsonify(precip)
 
 # 9.5.4 Stations Route
 @app.route("/api/v1.0/stations")
 def stations():
     results = session.query(Station.station).all()
-stations = list(np.ravel(results))
-return jsonify(stations=stations)
+    stations = list(np.ravel(results))
+    return jsonify(stations=stations)
 
 # 9.5.5 Monthly Temperature Route
 @app.route("/api/v1.0/tobs")
 def temp_monthly():
     prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
-results = session.query(Measurement.tobs).\
-filter(Measurement.station == 'USC00519281').\
-filter(Measurement.date >= prev_year).all()
-temps = list(np.ravel(results))
-return jsonify(temps=temps)
+    results = session.query(Measurement.tobs).\
+        filter(Measurement.station == 'USC00519281').\
+        filter(Measurement.date >= prev_year).all()
+    temps = list(np.ravel(results))
+    return jsonify(temps=temps)
 
 # 9.5.6 Statistics Route
 @app.route("/api/v1.0/temp/<start>")
